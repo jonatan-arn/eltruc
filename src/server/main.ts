@@ -1,5 +1,7 @@
 // import { Socket } from "socket.io";
 
+import { Server } from "socket.io";
+
 const path = require("path");
 const express = require("express");
 const app = express();
@@ -14,7 +16,7 @@ const server = app.listen(app.get("port"), () => {
   console.log("server on port", app.get("port"));
 });
 //Web socket
-const io = socketIo(server, {
+const io: Server = socketIo(server, {
   cosr: {
     origin: "localhost:4200",
     methods: ["GET", "POST"],
