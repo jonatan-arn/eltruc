@@ -11,7 +11,15 @@ module.exports = function (io) {
         });
         socket.on("create:room", (data) => {
             console.log("Create room");
-            const roomID = socket.id;
+            let roomID = "" + Math.floor(Math.random() * 90000) + 10000;
+            let checkRoom = io.sockets.adapter.rooms.get(roomID);
+            if (checkRoom == undefined)
+                socket.join(roomID);
+            while (checkRoom != undefined) {
+                console.log("redo roomID");
+                roomID = "" + Math.floor(Math.random() * 90000) + 10000;
+                checkRoom = io.sockets.adapter.rooms.get(roomID);
+            }
             socket.data.username = data.user;
             socket.data.room = roomID;
             socket.emit("connected:room", {
@@ -25,27 +33,32 @@ module.exports = function (io) {
             const roomID = data.roomID;
             let socketsRoom = [];
             const room = io.sockets.adapter.rooms.get(roomID);
-            for (let socketID of room) {
-                socketsRoom.push(socketID);
-            }
-            if (socketsRoom.length == 4) {
-                socket.emit("full:room");
+            if (room == undefined) {
+                socket.emit("undefined:room");
             }
             else {
-                socketsRoom.push(socket.id);
-                socket.data.username = user;
-                socket.data.room = roomID;
-                socket.join(roomID);
-                socket.emit("connected:room", {
-                    user: data.user,
-                    room: roomID,
-                    id: socket.id,
-                });
-                io.to(roomID).emit("new:player:owner", {
-                    user: user,
-                    room: roomID,
-                    id: socket.id,
-                });
+                for (let socketID of room) {
+                    socketsRoom.push(socketID);
+                }
+                if (socketsRoom.length == 4) {
+                    socket.emit("full:room");
+                }
+                else {
+                    socketsRoom.push(socket.id);
+                    socket.data.username = user;
+                    socket.data.room = roomID;
+                    socket.join(roomID);
+                    socket.emit("connected:room", {
+                        user: data.user,
+                        room: roomID,
+                        id: socket.id,
+                    });
+                    io.to(roomID).emit("new:player:owner", {
+                        user: user,
+                        room: roomID,
+                        id: socket.id,
+                    });
+                }
             }
         });
         socket.on("updateplayers:room", (data) => {
