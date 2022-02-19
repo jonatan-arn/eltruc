@@ -11,7 +11,7 @@ module.exports = function (io) {
         });
         socket.on("create:room", (data) => {
             console.log("Create room");
-            let roomID = "" + Math.floor(Math.random() * 90000) + 10000;
+            let roomID = "" + Math.floor(Math.random() * 90) + 100;
             let checkRoom = io.sockets.adapter.rooms.get(roomID);
             if (checkRoom == undefined)
                 socket.join(roomID);
@@ -28,23 +28,24 @@ module.exports = function (io) {
                 id: socket.id,
             });
         });
-        socket.on("join:room", (data) => {
+        socket.on("join:room", async (data) => {
             const user = data.user;
             const roomID = data.roomID;
-            let socketsRoom = [];
             const room = io.sockets.adapter.rooms.get(roomID);
             if (room == undefined) {
                 socket.emit("undefined:room");
             }
             else {
-                for (let socketID of room) {
-                    socketsRoom.push(socketID);
-                }
-                if (socketsRoom.length == 4) {
+                const sockets = await io.in(roomID).fetchSockets();
+                let socketsUsers = [];
+                for (let s of sockets)
+                    socketsUsers.push(s.data.username);
+                if (socketsUsers.includes(user))
+                    socket.emit("name:in:room");
+                else if (sockets.length == 4) {
                     socket.emit("full:room");
                 }
                 else {
-                    socketsRoom.push(socket.id);
                     socket.data.username = user;
                     socket.data.room = roomID;
                     socket.join(roomID);
