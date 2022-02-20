@@ -63,9 +63,21 @@ module.exports = function (io) {
             }
         });
         socket.on("updateplayers:room", (data) => {
-            console.log("Emit to others players");
             const lobbyID = String(socket.data.room);
             io.to(lobbyID).emit("new:player", data.players);
+        });
+        socket.on("leave:room", (data) => {
+            const lobbyID = String(socket.data.room);
+            let players = [];
+            for (let p of data.players) {
+                if (p.id != socket.id)
+                    players.push(p);
+            }
+            socket.leave(lobbyID);
+            io.to(lobbyID).emit("leave:player", {
+                players: players,
+                socketLeave: socket.data,
+            });
         });
     });
 };
