@@ -2,15 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 module.exports = function (io) {
     io.on("connection", function (socket) {
-        console.log("new conection", socket.id);
         socket.emit("connected", { id: socket.id });
         socket.on("disconnected", () => {
-            console.log(socket.id + " disconected");
             socket.leave(socket.data.room);
             socket.disconnect();
         });
         socket.on("create:room", (data) => {
-            console.log("Create room");
             let roomID = "" + Math.floor(Math.random() * 90) + 100;
             let checkRoom = io.sockets.adapter.rooms.get(roomID);
             if (checkRoom == undefined)
