@@ -16,4 +16,5 @@ const io = socketIo(server, {
     },
 });
 require("./rooms.js")(io);
+require("./game.js")(io);
 //# sourceMappingURL=main.js.map

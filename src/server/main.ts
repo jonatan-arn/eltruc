@@ -23,3 +23,4 @@ const io: Server = socketIo(server, {
   },
 });
 require("./rooms.js")(io);
+require("./game.js")(io);
