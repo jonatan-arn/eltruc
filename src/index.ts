@@ -18,9 +18,9 @@ const server = app.listen(app.get("port"), () => {
 //Web socket
 const io: Server = socketIo(server, {
   cosr: {
-    origin: "localhost:4200",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
-require("./rooms.js")(io);
-require("./game.js")(io);
+require("./server/rooms.js")(io);
+require("./server/game.js")(io);

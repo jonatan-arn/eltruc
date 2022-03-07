@@ -11,10 +11,10 @@ const server = app.listen(app.get("port"), () => {
 });
 const io = socketIo(server, {
     cosr: {
-        origin: "localhost:4200",
+        origin: "*",
         methods: ["GET", "POST"],
     },
 });
-require("./rooms.js")(io);
-require("./game.js")(io);
-//# sourceMappingURL=main.js.map
+require("./server/rooms.js")(io);
+require("./server/game.js")(io);
+//# sourceMappingURL=index.js.map
