@@ -6,9 +6,13 @@ module.exports = function (io) {
             const lobbyID = String(socket.data.room);
             io.to(lobbyID).emit("start:game", cards);
         });
-        socket.on("played:card", async (data) => {
+        socket.on("played:card", (data) => {
             const lobbyID = String(socket.data.room);
             io.to(lobbyID).emit("played:card", data);
+        });
+        socket.on("player:truc", (data) => {
+            io.to(data.playerLeft.id).emit("truc", data);
+            io.to(data.playerRight.id).emit("truc", data);
         });
     });
 };
