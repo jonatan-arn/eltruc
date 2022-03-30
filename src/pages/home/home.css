@@ -1,0 +1,59 @@
+.box {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  grid-auto-flow: column;
+}
+.xsBox {
+  background-image: url("../../assets/images/bk-image.png");
+}
+
+.text {
+  margin-right: 50%;
+  font-size: 2em;
+  text-transform: capitalize;
+}
+.text h2 {
+  width: 40%;
+}
+.form-div {
+  width: 27.25em;
+  height: 36.5em;
+  background-color: #bfdada;
+  border: 1px solid #767bff;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+.col {
+  height: 25%;
+}
+.group-btn {
+  display: grid;
+  gap: 4.6em;
+}
+.group-input {
+  display: flex;
+  flex-direction: column;
+}
+.group-input label {
+  color: #767bff;
+}
+.group-input input {
+  background: #ffffff;
+  width: 20em;
+  height: 3.125em;
+  border: 1px solid #767bff;
+  box-sizing: border-box;
+  box-shadow: 4px 10px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.user-input {
+  padding-top: 3.8em;
+}

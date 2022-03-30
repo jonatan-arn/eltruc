@@ -1,0 +1,15 @@
+.btn {
+  width: 25em;
+  height: 4.5em;
+  color: white;
+  background: #767bff;
+  border-radius: 1.3em;
+  cursor: pointer;
+}
+.btn:disabled {
+  background-color: #bbbde3 !important;
+}
+.btn:hover,
+.btn:focus {
+  background-color: #474eff;
+}
