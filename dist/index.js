@@ -4,7 +4,7 @@ const path = require("path");
 const express = require("express");
 const app = express();
 const socketIo = require("socket.io");
-app.set("port", process.env.PORT || 3000);
+app.set("port", process.env.PORT || 4000);
 app.use(express.static(path.join(__dirname, "../", "public")));
 const server = app.listen(app.get("port"), () => {
     console.log("server on port", app.get("port"));

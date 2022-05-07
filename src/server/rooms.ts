@@ -29,7 +29,7 @@ module.exports = function (io: Server) {
       //Get user name and roomd id and save it on socket
       socket.data.username = data.user;
       socket.data.room = roomID;
-
+      socket.data.owner = true;
       //Emit connected to room with socket data
       socket.emit("connected:room", {
         user: data.user,
@@ -63,6 +63,7 @@ module.exports = function (io: Server) {
           //Join room all requisits valid
           socket.data.username = user;
           socket.data.room = roomID;
+          socket.data.owner = false;
           socket.join(roomID);
 
           //Emit connected to room
@@ -73,11 +74,17 @@ module.exports = function (io: Server) {
           });
 
           //Emit to all players but only execute on the owner that a new player join room
-          io.to(roomID).emit("new:player:owner", {
-            user: user,
-            room: roomID,
-            id: socket.id,
-          });
+          let so = await io.in(roomID).fetchSockets();
+          for (let s of so) {
+            if (s.data.owner) {
+              s.emit("new:player:owner", {
+                user: user,
+                room: roomID,
+                id: socket.id,
+              });
+              break;
+            }
+          }
         }
       }
     });

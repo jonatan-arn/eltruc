@@ -19,6 +19,7 @@ module.exports = function (io) {
             }
             socket.data.username = data.user;
             socket.data.room = roomID;
+            socket.data.owner = true;
             socket.emit("connected:room", {
                 user: data.user,
                 room: roomID,
@@ -45,17 +46,23 @@ module.exports = function (io) {
                 else {
                     socket.data.username = user;
                     socket.data.room = roomID;
+                    socket.data.owner = false;
                     socket.join(roomID);
                     socket.emit("connected:room", {
                         user: data.user,
                         room: roomID,
                         id: socket.id,
                     });
-                    io.to(roomID).emit("new:player:owner", {
-                        user: user,
-                        room: roomID,
-                        id: socket.id,
-                    });
+                    let so = await io.in(roomID).fetchSockets();
+                    for (let s of so) {
+                        if (s.data.owner) {
+                            s.emit("new:player:owner", {
+                                user: user,
+                                room: roomID,
+                                id: socket.id,
+                            });
+                        }
+                    }
                 }
             }
         });
