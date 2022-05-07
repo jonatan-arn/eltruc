@@ -1,0 +1,29 @@
+<form class="form" [formGroup]="lobbyForm">
+  <div class="group-input col user-input" formGroupName="create">
+    <label htmlFor="user">Usuario</label>
+    <input type="text" type="text" formControlName="user" />
+  </div>
+  <div class="group-input col" formGroupName="join">
+    <label htmlFor="user">Id de la sala </label>
+    <input type="text" type="text" formControlName="room" />
+  </div>
+
+  <div class="group-btn col">
+    <button
+      formGroupName="create"
+      [disabled]="lobbyForm.controls['create'].invalid"
+      class="btn"
+      (click)="createRoom()"
+    >
+      Crear Sala
+    </button>
+    <button
+      formGroupName="join"
+      [disabled]="lobbyForm.invalid"
+      class="btn"
+      (click)="joinRoom()"
+    >
+      Unirse sala
+    </button>
+  </div>
+</form>

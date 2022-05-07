@@ -1,0 +1,116 @@
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  font-size: 2vw;
+  flex-direction: column;
+  .points,
+  .point {
+    padding-bottom: 1rem;
+  }
+  .point {
+    font-size: 2rem;
+  }
+  .box {
+    border-radius: 15px;
+
+    background-color: #b3d5d6;
+    width: 90vw;
+    height: 90vh;
+
+    .players {
+      margin: 1vh;
+    }
+    .n1,
+    .n2,
+    .n3,
+    .n4 {
+      display: flex;
+      margin: 1vh;
+      position: absolute;
+    }
+    .n1 {
+      left: 35vw;
+    }
+    .n2 {
+      top: 40vh;
+      transform: rotate(90deg);
+    }
+    .n3 {
+      top: 70vh;
+      left: 35vw;
+    }
+    .n4 {
+      top: 40vh;
+      left: 70vw;
+      transform: rotate(-90deg);
+    }
+
+    .player {
+      border: 1px solid black;
+      border-radius: 10px;
+      margin: 1vw;
+      padding: 2vh;
+    }
+    .b-group {
+      position: absolute;
+
+      bottom: 6vh;
+      right: 15vw;
+      .b {
+        margin: 1rem;
+      }
+    }
+  }
+}
+
+.card {
+  border: 0.5vh solid;
+  margin: 1vw;
+  width: 6vw;
+  height: 12vh;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.espases {
+  border-color: blue;
+}
+.oros {
+  border-color: yellow;
+}
+.copes {
+  border-color: red;
+}
+.bastos {
+  border-color: green;
+}
+.playedTop {
+  position: absolute;
+  top: 32vh;
+  left: 47vw;
+}
+.playedLeft {
+  position: absolute;
+  top: 40vh;
+  left: 36vw;
+  transform: rotate(90deg);
+}
+.playedRight {
+  position: absolute;
+  top: 40vh;
+  left: 58vw;
+  transform: rotate(-90deg);
+}
+.played {
+  position: absolute;
+  top: 53vh;
+  left: 47vw;
+}
+.turnLabel {
+  position: absolute;
+  bottom: 6vh;
+  left: 13vw;
+}

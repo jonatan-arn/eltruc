@@ -1,0 +1,58 @@
+<div class="main">
+  <div class="points">
+    <div class="point">Puntos equipo 1: {{ team1Points }}</div>
+
+    <div class="point">Puntos equipo 2: {{ team2Points }}</div>
+  </div>
+  <div class="box">
+    <div class="player n1">
+      <span class="name">{{ top.player.user }}</span>
+
+      <button class="card" *ngFor="let card of top.cards"></button>
+    </div>
+    <button class="card playedTop {{ top.cardPlayed.palo }} ">
+      {{ top.cardPlayed.numero }}
+    </button>
+
+    <div class="player n2">
+      <span class="name">{{ left.player.user }}</span>
+      <button class="card" *ngFor="let card of left.cards"></button>
+    </div>
+    <button class="card  playedLeft {{ left.cardPlayed.palo }} ">
+      {{ left.cardPlayed.numero }}
+    </button>
+
+    <div class="player n3">
+      <span class="name">{{ me.player.user }}</span>
+      <button
+        (click)="playCard(card)"
+        class="card {{ card.palo }} "
+        *ngFor="let card of me.cards"
+      >
+        {{ card.numero }}
+      </button>
+    </div>
+    <button class="card  played {{ me.cardPlayed.palo }} ">
+      {{ me.cardPlayed.numero }}
+    </button>
+
+    <div class="player n4">
+      <span class="name">{{ right.player.user }}</span>
+      <button class="card" *ngFor="let card of right.cards"></button>
+    </div>
+    <button class="card  playedRight {{ right.cardPlayed.palo }} ">
+      {{ right.cardPlayed.numero }}
+    </button>
+    <div class="b-group">
+      <button class="b" mat-raised-button color="primary" (click)="trucar()">
+        {{ trucViewText }}
+      </button>
+      <button class="b" mat-raised-button color="primary" (click)="envidar()">
+        {{ evitViewText }}
+      </button>
+    </div>
+    <div class="turnLabel">
+      <label>Turno de {{ nameTurn }}</label>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="first">
+  <ng-container *ngFor="let p of playersAndGaps | keyvalue">
+    <div class="top flex p" ngClass.xs="xsP" *ngIf="p.key == 1 || p.key == 2">
+      <ng-container *ngIf="p.value.id != '0'">
+        <div class="legend">
+          <p class="numberP">Jugador {{ p.value.playerNumber }}</p>
+        </div>
+        <div class="pText flex">
+          <p class="user">{{ p.value.user }}</p>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="p.value.id == '0'">
+        <button class="btn" (click)="changeNumber(p.value.playerNumber)">
+          Click para entrar!
+        </button>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>
+<div class="second">
+  <ng-container *ngFor="let p of playersAndGaps | keyvalue">
+    <div class="top flex p" ngClass.xs="xsP" *ngIf="p.key == 3 || p.key == 4">
+      <ng-container *ngIf="p.value.id != '0'">
+        <div class="legend">
+          <p class="numberP">Jugador {{ p.value.playerNumber }}</p>
+        </div>
+        <div class="pText flex">
+          <p class="user">{{ p.value.user }}</p>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="p.value.id == '0'">
+        <button class="btn" (click)="changeNumber(p.value.playerNumber)">
+          Click para entrar!
+        </button>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

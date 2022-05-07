@@ -1,0 +1,29 @@
+.box {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  grid-auto-flow: column;
+}
+.xsBox {
+  background-image: url("/assets/bk-image.png");
+}
+
+.text {
+  margin-right: 50%;
+  font-size: 2em;
+  text-transform: capitalize;
+}
+.text h2 {
+  width: 40%;
+}
+.form-div {
+  width: 27.25em;
+  height: 36.5em;
+  background-color: #bfdada;
+  border: 1px solid #767bff;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+.xsForm {
+  height: 100%;
+}

@@ -1,0 +1,95 @@
+.lbox {
+  text-align: center;
+}
+.btn {
+  justify-self: center;
+}
+.btn-margins {
+  margin-top: 5.625em;
+  margin-bottom: 1em;
+}
+.xsBtn-margins {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+.code {
+  background-color: #bfdada;
+  border-radius: 1em;
+  width: 30em;
+  height: 8.125em;
+  margin-bottom: 5em;
+  justify-self: center;
+  border: 1px solid #767bff;
+  box-sizing: border-box;
+}
+.xsCode {
+  width: 22.06em;
+  height: 8.125em;
+  margin-bottom: 0.5em;
+}
+.code h2 {
+  margin-bottom: 0.5em;
+}
+.row {
+  flex-direction: row !important;
+}
+.IDn {
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  border-radius: 1em;
+  width: 3em;
+  height: 3em;
+  margin: 1em;
+}
+.players {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5em;
+}
+
+.p {
+  width: 27.6875em;
+  height: 8.375em;
+  border-radius: 1em;
+  border: 1px solid #767bff;
+  box-sizing: border-box;
+
+  background-color: #bfdada;
+}
+.xsP {
+  width: 23em;
+  height: 6.25em;
+}
+.top {
+  margin-bottom: 1em;
+}
+.legend {
+  color: #767bff;
+  width: 20em;
+}
+.numberP {
+  text-align: start;
+  margin-bottom: 0.5em;
+}
+.user {
+  text-align: start;
+  width: 100%;
+  margin-left: 1em;
+}
+.pText {
+  background: #dcdcdc;
+  width: 20em;
+  height: 3.125em;
+  border: 1px solid #767bff;
+  box-sizing: border-box;
+  box-shadow: 4px 10px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

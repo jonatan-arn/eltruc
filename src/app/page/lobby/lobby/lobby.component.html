@@ -1,0 +1,21 @@
+<div class="lbox flex">
+  <button
+    class="btn"
+    ngClass.gt-xs="btn-margins"
+    ngClass.xs="xsBtn-margins"
+    *ngIf="isOwner"
+    (click)="startGame()"
+    [disabled]="players.length != 4"
+  >
+    Comenzar la partida
+  </button>
+  <div class="code" ngClass.xs="xsCode">
+    <h2>Codigo de la sala</h2>
+    <p class="flex row">
+      <span *ngFor="let n of roomIDArray" class="IDn flex">
+        {{ n }}
+      </span>
+    </p>
+  </div>
+  <app-players [players]="players" ngClass.gt-xs="players"></app-players>
+</div>
