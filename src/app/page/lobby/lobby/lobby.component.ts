@@ -79,7 +79,6 @@ export class LobbyComponent implements OnInit {
     });
 
     this.socketService.startGameEve.subscribe((cardPlayers) => {
-      console.log('Start game');
       this.gameService.cardsPlayers = cardPlayers;
       this.route.navigate(['/game']);
     });

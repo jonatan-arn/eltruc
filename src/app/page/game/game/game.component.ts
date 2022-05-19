@@ -1,11 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { Player } from 'src/app/interfaze/player';
-import { cardsPlayer, card, cards } from 'src/app/interfaze/card';
+import { cardsPlayer, card, cards, defaultCard } from 'src/app/interfaze/card';
 import { GameService } from 'src/app/service/game.service';
 import { SocketService } from 'src/app/service/room.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TrucComponent } from '../truc/truc.component';
 import { EnvitComponent } from '../envit/envit.component';
+import { WaitComponent } from '../wait dialog/wait.component';
+import {
+  defaultGameState,
+  defautlEnvitStates,
+  defautlTrucStates,
+  gameState,
+} from 'src/app/interfaze/game';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-game',
@@ -13,45 +21,37 @@ import { EnvitComponent } from '../envit/envit.component';
   styleUrls: ['./game.component.scss'],
 })
 export class GameComponent implements OnInit {
-  roundWinners = new Map([
-    [1, { team1: false, team2: false }],
-    [2, { team1: false, team2: false }],
-    [3, { team1: false, team2: false }],
-  ]);
-  nameTurn = '';
-  team1Points: number = 0;
-  team2Points: number = 0;
-  cardsPlayedRound: number = 0;
-  round: number = 0;
-  trucViewText: string = 'trucar';
-  evitViewText: string = 'envidar';
   player!: Player;
   players!: Player[];
   cardsGame: cardsPlayer[] = [];
   cardsGameMap: Map<number, cardsPlayer> = new Map([]);
+  currentIndexes: number[] = [];
+  gameState: gameState = { ...defaultGameState };
+  trucStates = defautlTrucStates;
+  envitStates = defautlEnvitStates;
+  envitTeamWinner = 0;
+  //View
   me!: cardsPlayer;
   top!: cardsPlayer;
   left!: cardsPlayer;
   right!: cardsPlayer;
-  playerStartHand!: Player;
-  currentIndexes: number[] = [];
-  tie: boolean = false;
-  trucPoints: number = 1;
-  envitPoints: number = 1;
-  trucState: string = 'truc';
-  envitState: string = '';
+
   constructor(
     private socketService: SocketService,
     private gameService: GameService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
     this.player = this.socketService.player;
+    this.gameState.team =
+      this.player.playerNumber == 1 || this.player.playerNumber == 3 ? 1 : 2;
+
     this.players = this.socketService.players;
-    this.round = 1;
+    this.gameState.round = 1;
     if (this.player.owner) {
-      this.nameTurn = this.player.user;
+      this.gameState.nameTurn = this.player.user;
       this.loadArray();
       this.draw();
     } else {
@@ -60,37 +60,168 @@ export class GameComponent implements OnInit {
     }
     for (let p of this.cardsGame) {
       if (p.player.playerNumber == 1) {
-        this.playerStartHand = p.player;
+        this.gameState.playerStartHand = { ...p.player };
         break;
       }
     }
 
     this.gameService.cardPlayedEven.subscribe((data) => {
       const { nextPlayer, cards, card } = data;
-      this.nameTurn = nextPlayer.user;
+      this.gameState.nameTurn = nextPlayer.user;
       this.cardsGame = cards;
       this.loadMap();
       if (nextPlayer.id == this.player.id) {
         this.player = nextPlayer;
       }
-      this.cardsPlayedRound++;
-      if (this.cardsPlayedRound == 4) {
+      this.gameState.cardsPlayedRound++;
+      if (this.gameState.cardsPlayedRound == 4) {
+        this.gameState.envitDiabled = true;
         this.setWinner();
-        console.log(this.roundWinners);
-        this.round++;
-        this.cardsPlayedRound = 0;
+        this.gameState.round++;
+        this.gameState.cardsPlayedRound = 0;
       }
     });
     this.gameService.getCardsEve.subscribe((cards) => {
       this.cardsGame = cards;
       this.loadMap();
     });
+
     this.gameService.trucEve.subscribe((data) => {
-      console.log(data);
       this.dialog.open(TrucComponent, {
-        data: { trucState: this.trucState },
+        data: { trucState: this.gameState.trucState },
+        disableClose: true,
       });
     });
+    this.gameService.envitEve.subscribe((data) => {
+      console.log('a');
+
+      this.dialog.open(EnvitComponent, {
+        data: { envitState: this.gameState.envitState },
+        disableClose: true,
+      });
+    });
+    this.gameService.getTrucStatusEve.subscribe((res) => {
+      const { state, value, playerActionNumber } = res;
+      const data = this.checkAction(
+        playerActionNumber,
+        state,
+        value,
+        this.trucStates,
+        this.gameState.trucState
+      );
+      if (data.status != 'undefined') {
+        if (data.status == 'score') {
+          const { team } = data.payload;
+          this.scorePoints(team);
+        } else if (data.status == 'current') {
+          const { disabled, state, newValue } = data.payload;
+          this.gameState = {
+            ...this.gameState,
+            trucValue: newValue,
+            trucViewText: state,
+            trucState: state,
+            trucDiabled: disabled,
+          };
+        } else {
+          const { state, newValue, teamAction } = data.payload;
+          this.gameState = {
+            ...this.gameState,
+            trucValue: newValue,
+            trucViewText: state,
+            trucState: state,
+          };
+          if (this.player.turn) {
+            if (teamAction == this.gameState.team) {
+              this.gameService.trucar(
+                this.gameState.trucState,
+                this.me,
+                this.top
+              );
+
+              this.gameService.waitResponse(this.left, this.right);
+            } else {
+              this.gameService.trucar(
+                this.gameState.trucState,
+                this.left,
+                this.right
+              );
+              this.gameService.waitResponse(this.me, this.top);
+            }
+          }
+        }
+      }
+    });
+    this.gameService.getEnvitStatusEve.subscribe((res) => {
+      const { state, value, playerActionNumber } = res;
+      const data = this.checkAction(
+        playerActionNumber,
+        state,
+        value,
+        this.envitStates,
+        this.gameState.envitState
+      );
+      if (data.status != 'undefined') {
+        if (data.status == 'score') {
+          const { team, state } = data.payload;
+          this.envitTeamWinner = team;
+          this.gameState = {
+            ...this.gameState,
+            envitViewText: state,
+            envitState: state,
+            envitDiabled: true,
+          };
+        } else if (data.status == 'current') {
+          const { disabled, state, newValue } = data.payload;
+          this.gameState = {
+            ...this.gameState,
+            envitValue: newValue,
+            envitViewText: state,
+            envitState: state,
+            envitDiabled: disabled,
+          };
+        } else {
+          const { state, newValue, teamAction } = data.payload;
+          this.gameState = {
+            ...this.gameState,
+            envitValue: newValue,
+            envitViewText: state,
+            envitState: state,
+          };
+          if (this.player.turn) {
+            if (teamAction == this.gameState.team) {
+              this.gameService.envidar(
+                this.gameState.envitState,
+                this.me,
+                this.top
+              );
+
+              this.gameService.waitResponse(this.left, this.right);
+            } else {
+              this.gameService.envidar(
+                this.gameState.envitState,
+                this.left,
+                this.right
+              );
+              this.gameService.waitResponse(this.me, this.top);
+            }
+          }
+        }
+      }
+    });
+    this.gameService.awaitResponseStartEve.subscribe(() => {
+      let dialogRef = this.dialog.open(WaitComponent, { disableClose: true });
+      dialogRef.afterClosed().subscribe((res) => {
+        if (this.player.playerNumber == 1 || this.player.playerNumber == 2) {
+          if (res.type == 'truc')
+            this.gameService.sendTrucStatus(res, this.player.playerNumber);
+          else this.gameService.sendEnvitStatus(res, this.player.playerNumber);
+        }
+      });
+    });
+    this.gameService.me = this.me;
+    this.gameService.top = this.top;
+    this.gameService.left = this.left;
+    this.gameService.right = this.right;
   }
   ngOnChanges(): void {
     this.cardsGame = this.gameService.cardsPlayers;
@@ -134,10 +265,11 @@ export class GameComponent implements OnInit {
   }
   loadMap() {
     for (let pCards of this.cardsGame) {
-      if (pCards.player.owner) this.nameTurn = pCards.player.user;
+      if (pCards.player.turn) this.gameState.nameTurn = pCards.player.user;
 
       this.cardsGameMap.set(pCards.player.playerNumber, pCards);
     }
+
     this.loadPlayers();
   }
   loadPlayers() {
@@ -163,11 +295,10 @@ export class GameComponent implements OnInit {
     this.generateCards();
   }
   playCard(card: card) {
-    if (this.cardsPlayedRound == 4) this.round = 2;
-    if (!this.player.turn) console.log('No es tu turno');
+    if (this.gameState.cardsPlayedRound == 4) this.gameState.round = 2;
+    if (!this.player.turn) this.snackBar.open('no es tu turno');
     else {
       this.player.turn = false;
-
       for (let i = 0; i < this.cardsGame.length; i++)
         if (this.cardsGame[i].player.id == this.player.id) {
           for (let j = 0; j < this.cardsGame[i].cards.length; j++) {
@@ -187,74 +318,65 @@ export class GameComponent implements OnInit {
     let winner = this.cardsGame[0];
     let roundwinner = 0;
     let card = { numero: '', palo: '', trucValue: 100 };
+    let round = { team1: false, team2: true };
+
     for (let player of this.cardsGame) {
       if (player.cardPlayed.trucValue < card.trucValue) {
         card = player.cardPlayed;
         winner = player;
       } else if (player.cardPlayed.trucValue == card.trucValue) {
-        if (this.round == 1) {
-          this.tie = true;
-        } else {
-          if (this.roundWinners.get(1)?.team1 == true) roundwinner = 1;
+        this.gameState.tie = true;
+
+        if (this.gameState.round != 1) {
+          if (this.gameState.roundWinners.get(1)?.team1 == true)
+            roundwinner = 1;
           else roundwinner = 2;
         }
         card = player.cardPlayed;
         winner = player;
       }
     }
-    if (this.tie) {
-      for (let player of this.cardsGame)
-        if (player.cardPlayed.trucValue == winner.cardPlayed.trucValue) {
-          if (player.player.playerNumber < winner.player.playerNumber)
-            winner = player;
-        }
+    if (this.gameState.tie) {
+      if (this.gameState.round == 1) {
+        for (let player of this.cardsGame)
+          if (player.cardPlayed.trucValue == winner.cardPlayed.trucValue) {
+            if (player.player.playerNumber < winner.player.playerNumber)
+              winner = player;
+          }
+      } else {
+        if (roundwinner == 1) round = { team1: true, team2: false };
+        else round = { team1: false, team2: true };
+      }
     }
 
     this.player.turn = this.player.id == winner?.player.id ? true : false;
-    let round = this.roundWinners.get(this.round);
-    if (winner?.player.playerNumber == 1 || winner?.player.playerNumber == 3) {
-      round = { team1: true, team2: false };
-    } else {
-      round = { team1: false, team2: true };
+    if (this.gameState.tie) {
+      if (
+        winner?.player.playerNumber == 1 ||
+        winner?.player.playerNumber == 3
+      ) {
+        round = { team1: true, team2: false };
+      } else {
+        round = { team1: false, team2: true };
+      }
     }
-    this.roundWinners.set(this.round, round);
-
+    this.gameState.roundWinners.set(this.gameState.round, round);
     roundwinner = this.checkWinner();
-    if (roundwinner != 0) {
-      if (roundwinner == 1) {
-        this.team1Points += this.trucPoints;
-      } else if (roundwinner == 2) {
-        this.team2Points += this.trucPoints;
-      }
-      this.resetTableCards();
-
-      this.round = 1;
-      let nextPlayer = ++this.playerStartHand.playerNumber;
-      this.tie = false;
-      if (nextPlayer > 4) nextPlayer = 1;
-      for (let p of this.cardsGame) {
-        if (p.player.playerNumber == nextPlayer) {
-          this.playerStartHand = p.player;
-          break;
-        }
-      }
-      this.player.turn =
-        this.playerStartHand.id == this.player.id ? true : false;
-      if (this.player.turn == true) this.draw();
-    }
+    this.scorePoints(roundwinner);
   }
+
   checkWinner(): number {
-    if (this.round == 2) {
-      if (this.tie) {
-        let round2 = this.roundWinners.get(2);
+    if (this.gameState.round == 2) {
+      if (this.gameState.tie) {
+        let round2 = this.gameState.roundWinners.get(2);
         if (round2?.team1 == true) {
           return 1;
         } else {
           return 2;
         }
       } else {
-        let round1 = this.roundWinners.get(1);
-        let round2 = this.roundWinners.get(2);
+        let round1 = this.gameState.roundWinners.get(1);
+        let round2 = this.gameState.roundWinners.get(2);
         if (round1?.team1 == true && round2?.team1 == true) {
           return 1;
         } else if (round1?.team2 == true && round2?.team2 == true) {
@@ -263,10 +385,45 @@ export class GameComponent implements OnInit {
       }
     }
 
-    if (this.round == 3) {
-      let round1 = this.roundWinners.get(1);
-      let round2 = this.roundWinners.get(2);
-      let round3 = this.roundWinners.get(3);
+    if (this.gameState.round == 3) {
+      //Calculate envit winner
+      if (this.gameState.isEnvidar) {
+        let envits: { playerNumber: number; envit: number }[] = [];
+        this.cardsGameMap.forEach((v) => {
+          let c = v.cards.filter((c) => c.palo == 'c');
+          let b = v.cards.filter((b) => b.palo == 'b');
+          let o = v.cards.filter((o) => o.palo == 'o');
+          let a = v.cards.filter((a) => a.palo == 'a');
+          if (c.length >= 2) {
+            envits.push({
+              playerNumber: v.player.playerNumber,
+              envit: this.getEnvitValue(c),
+            });
+          } else if (b.length >= 2) {
+            envits.push({
+              playerNumber: v.player.playerNumber,
+              envit: this.getEnvitValue(b),
+            });
+          } else if (o.length >= 2) {
+            envits.push({
+              playerNumber: v.player.playerNumber,
+              envit: this.getEnvitValue(o),
+            });
+          } else if (a.length >= 2) {
+            envits.push({
+              playerNumber: v.player.playerNumber,
+              envit: this.getEnvitValue(a),
+            });
+          }
+        });
+        let pWinner = Math.max(...envits.map((v) => v.envit));
+        this.envitTeamWinner = pWinner == 1 || pWinner == 3 ? 1 : 2;
+      }
+
+      //Calculate truc winner
+      let round1 = this.gameState.roundWinners.get(1);
+      let round2 = this.gameState.roundWinners.get(2);
+      let round3 = this.gameState.roundWinners.get(3);
       let team1round = 0;
       let team2round = 0;
 
@@ -295,28 +452,142 @@ export class GameComponent implements OnInit {
     }
     return 0;
   }
-  resetTableCards() {
-    this.me.cardPlayed = { numero: '', palo: '', trucValue: 0 };
-    this.top.cardPlayed = { numero: '', palo: '', trucValue: 0 };
-    this.left.cardPlayed = { numero: '', palo: '', trucValue: 0 };
-    this.right.cardPlayed = { numero: '', palo: '', trucValue: 0 };
-    this.roundWinners.set(1, { team1: false, team2: false });
-    this.roundWinners.set(2, { team1: false, team2: false });
-    this.roundWinners.set(3, { team1: false, team2: false });
+  getEnvitValue(array: card[]) {
+    if (array.length == 2) {
+      return parseInt(array[0].numero) + parseInt(array[1].numero);
+    } else {
+      let numbers = [];
+      for (let card of array) {
+        numbers.push(parseInt(card.numero));
+      }
+      let n1 = Math.max.apply(null, numbers); // get the max of the array
+      numbers.splice(numbers.indexOf(n1), 1); // remove max from the array
+      let n2 = Math.max.apply(null, numbers); // get the 2nd max
+      return n1 + n2;
+    }
   }
+  scorePoints(roundwinner: number) {
+    if (roundwinner != 0) {
+      if (roundwinner == 1) {
+        this.gameState.team1Points += this.gameState.trucValue;
+      } else if (roundwinner == 2) {
+        this.gameState.team2Points += this.gameState.trucValue;
+      }
+      if (this.envitTeamWinner == 1) {
+        this.gameState.team1Points += this.gameState.envitValue;
+      } else if (this.envitTeamWinner == 2) {
+        this.gameState.team2Points += this.gameState.envitValue;
+      }
+      let nextPlayer = ++this.gameState.playerStartHand.playerNumber;
+
+      if (nextPlayer > 4) nextPlayer = 1;
+      for (let p of this.cardsGame) {
+        if (p.player.playerNumber == nextPlayer) {
+          this.gameState.nameTurn = p.player.user;
+
+          this.gameState.playerStartHand = p.player;
+          break;
+        }
+      }
+      this.player.turn =
+        this.gameState.playerStartHand.id == this.player.id ? true : false;
+      this.resetGame();
+
+      if (this.player.turn == true) this.draw();
+    }
+  }
+
   trucar() {
-    if (this.player.turn == true) {
-      this.gameService.trucar(
-        this.trucState,
-        this.left.player,
-        this.right.player
-      );
-      this.gameService.waitResponse(this.me.player, this.top.player);
+    if (this.player.turn == true && !this.gameState.trucDiabled) {
+      this.gameService.trucar(this.gameState.trucState, this.left, this.right);
+      this.gameService.waitResponse(this.me, this.top);
     }
   }
   envidar() {
-    this.dialog.open(EnvitComponent, {
-      data: { envitState: this.envitState },
-    });
+    if (this.player.turn == true && !this.gameState.envitDiabled) {
+      this.gameState.isEnvidar = true;
+      this.gameService.envidar(
+        this.gameState.envitState,
+        this.left,
+        this.right
+      );
+      this.gameService.waitResponse(this.me, this.top);
+    }
+  }
+  checkAction(
+    playerActionNumber: number,
+    state: string,
+    value: number,
+    states: {
+      state: string;
+      value: number;
+    }[],
+    gameState: string
+  ) {
+    const teamAction =
+      playerActionNumber == 1 || playerActionNumber == 3 ? 1 : 2;
+    //If both says no to truc
+    let newValue = 0;
+    let disabled = false;
+    if (state == 'current') {
+      if (value == 0) {
+        if (playerActionNumber == 1 || playerActionNumber == 3) {
+          return {
+            status: 'score',
+            payload: { team: 1, state, newValue, disabled, teamAction },
+          };
+        } else {
+          return {
+            status: 'score',
+            payload: { team: 2, state, newValue, disabled, teamAction },
+          };
+        }
+      } else {
+        newValue = value;
+        for (let i = 0; i < states.length; i++) {
+          if (states[i].state == gameState) {
+            let state = '';
+            if (value >= 30) {
+              state = states[i].state;
+              disabled = true;
+            } else {
+              state = states[i + 1].state;
+              disabled = teamAction == this.gameState.team ? true : false;
+            }
+            return {
+              status: 'current',
+              payload: { team: 0, state, newValue, disabled, teamAction },
+            };
+          }
+        }
+      }
+    } else {
+      return {
+        status: 'next',
+        payload: { team: 0, state, newValue, disabled, teamAction },
+      };
+    }
+
+    return {
+      status: 'undefind',
+      payload: { team: 0, state, newValue, disabled, teamAction },
+    };
+  }
+  resetGame() {
+    this.me.cardPlayed = defaultCard;
+    this.top.cardPlayed = defaultCard;
+    this.left.cardPlayed = defaultCard;
+    this.right.cardPlayed = defaultCard;
+    this.gameService.trucResponsePlayers = { left: '', right: '' };
+    this.gameService.envitResponsePlayers = { left: '', right: '' };
+    const { team1Points, team2Points, team } = this.gameState;
+    this.gameState = { ...defaultGameState, team1Points, team2Points, team };
+    if (this.gameState.team1Points >= 30 || this.gameState.team2Points >= 30) {
+      const winner =
+        this.gameState.team1Points > this.gameState.team2Points
+          ? 'Equipo 1'
+          : 'Equipo 2 ';
+      this.gameState = { ...defaultGameState, end: true, winner };
+    }
   }
 }

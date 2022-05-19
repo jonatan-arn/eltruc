@@ -10,7 +10,12 @@
     Comenzar la partida
   </button>
   <div class="code" ngClass.xs="xsCode">
-    <h2>Codigo de la sala</h2>
+    <h2>
+      Codigo de la sala
+      <button cdkCopyToClipboard="{{ roomID }}">
+        <i class="material-icons">content_copy</i>
+      </button>
+    </h2>
     <p class="flex row">
       <span *ngFor="let n of roomIDArray" class="IDn flex">
         {{ n }}

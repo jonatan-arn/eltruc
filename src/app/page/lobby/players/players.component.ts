@@ -24,7 +24,6 @@ export class PlayersComponent implements OnInit {
     //     this.playersAndGaps.set(p.playerNumber, p);
     // }
     this.loadMap();
-    console.log(this.playersAndGaps);
   }
 
   ngOnChanges(): void {

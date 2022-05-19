@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Socket, io } from 'socket.io-client';
 import { HelpDialogComponent } from 'src/app/global/components/help-dialog/help-dialog.component';
@@ -22,7 +23,8 @@ export class HomeComponent implements OnInit {
     private socketService: SocketService,
     private route: Router,
     private dialog: MatDialog,
-    private mediaSizeService: MediaSizeService
+    private mediaSizeService: MediaSizeService,
+    private snackBar: MatSnackBar
   ) {}
   ngOnInit(): void {
     //Emit socket connected
@@ -45,23 +47,17 @@ export class HomeComponent implements OnInit {
 
     //Subscribe to room full
     this.socketService.fullRoom.subscribe(() =>
-      this.dialog.open(HelpDialogComponent, {
-        data: { error: 'sala llena' },
-      })
+      this.snackBar.open('sala llena')
     );
 
     //Subscribe to room undefined
     this.socketService.undefinedRoom.subscribe(() =>
-      this.dialog.open(HelpDialogComponent, {
-        data: { error: 'no existe la sala introducida' },
-      })
+      this.snackBar.open('no existe la sala introducida')
     );
 
     //Subscribe to nameInRoom
     this.socketService.nameInRoom.subscribe(() =>
-      this.dialog.open(HelpDialogComponent, {
-        data: { error: 'ese nombre ya esta en esa sala' },
-      })
+      this.snackBar.open('ese nombre ya existe en la sala')
     );
   }
 }

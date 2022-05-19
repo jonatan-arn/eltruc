@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { GameService } from 'src/app/service/game.service';
 
 @Component({
   selector: 'app-envit',
@@ -7,10 +8,20 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./envit.component.sass'],
 })
 export class EnvitComponent implements OnInit {
-  envitStates = ['envide', 'torne', 'la falta'];
+  envitStates = ['envidar', 'torne', 'la falta'];
+  nextEnvitState!: string;
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { envitState: string },
+    private gameService: GameService,
+    private dialogRef: MatDialogRef<EnvitComponent>
+  ) {}
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { envitState: string }) {}
-
-  ngOnInit(): void {}
-  envit(state: string) {}
+  ngOnInit(): void {
+    let indx = this.envitStates.indexOf(this.data.envitState);
+    this.nextEnvitState = this.envitStates[indx + 1];
+  }
+  envit(state: string) {
+    this.gameService.envitResponse(state, this.data.envitState);
+    this.dialogRef.close();
+  }
 }

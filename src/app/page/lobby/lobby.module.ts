@@ -5,9 +5,16 @@ import { LobbyComponent } from './lobby/lobby.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 @NgModule({
   declarations: [LobbyComponent, PlayersComponent],
-  imports: [CommonModule, MatButtonModule, MatDialogModule, FlexLayoutModule],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatDialogModule,
+    FlexLayoutModule,
+    ClipboardModule,
+  ],
 })
 export class LobbyModule {}

@@ -1,58 +1,112 @@
 <div class="main">
-  <div class="points">
-    <div class="point">Puntos equipo 1: {{ team1Points }}</div>
+  <ng-container *ngIf="!gameState.end">
+    <div class="points">
+      <div class="point">Puntos equipo 1: {{ gameState.team1Points }}</div>
 
-    <div class="point">Puntos equipo 2: {{ team2Points }}</div>
-  </div>
-  <div class="box">
-    <div class="player n1">
-      <span class="name">{{ top.player.user }}</span>
+      <div class="point">Puntos equipo 2: {{ gameState.team2Points }}</div>
+    </div>
+    <div class="box">
+      <div class="player n1">
+        <span class="name">{{ top.player.user }}</span>
+        <img
+          *ngFor="let card of top.cards"
+          src="assets/cards/back_card.svg"
+          alt="back_card"
+          class="card"
+        />
+      </div>
 
-      <button class="card" *ngFor="let card of top.cards"></button>
-    </div>
-    <button class="card playedTop {{ top.cardPlayed.palo }} ">
-      {{ top.cardPlayed.numero }}
-    </button>
+      <img
+        *ngIf="top.cardPlayed.trucValue !== 0"
+        src="assets/cards/{{ top.cardPlayed.numero }}{{
+          top.cardPlayed.palo
+        }}.svg"
+        alt="card_played_top"
+        class="card playedTop"
+      />
+      <div class="player n2">
+        <span class="name">{{ left.player.user }}</span>
+        <img
+          *ngFor="let card of left.cards"
+          src="assets/cards/back_card.svg"
+          alt="back_card"
+          class="card"
+        />
+      </div>
 
-    <div class="player n2">
-      <span class="name">{{ left.player.user }}</span>
-      <button class="card" *ngFor="let card of left.cards"></button>
-    </div>
-    <button class="card  playedLeft {{ left.cardPlayed.palo }} ">
-      {{ left.cardPlayed.numero }}
-    </button>
+      <img
+        *ngIf="left.cardPlayed.trucValue !== 0"
+        src="assets/cards/{{ left.cardPlayed.numero }}{{
+          left.cardPlayed.palo
+        }}.svg"
+        alt="card_played_left"
+        class="card playedLeft"
+      />
 
-    <div class="player n3">
-      <span class="name">{{ me.player.user }}</span>
-      <button
-        (click)="playCard(card)"
-        class="card {{ card.palo }} "
-        *ngFor="let card of me.cards"
-      >
-        {{ card.numero }}
-      </button>
-    </div>
-    <button class="card  played {{ me.cardPlayed.palo }} ">
-      {{ me.cardPlayed.numero }}
-    </button>
+      <div class="player n3">
+        <span class="name">{{ me.player.user }}</span>
 
-    <div class="player n4">
-      <span class="name">{{ right.player.user }}</span>
-      <button class="card" *ngFor="let card of right.cards"></button>
+        <img
+          *ngFor="let card of me.cards"
+          (click)="playCard(card)"
+          src="assets/cards/{{ card.numero }}{{ card.palo }}.svg"
+          alt="back_card"
+          class="card"
+        />
+      </div>
+
+      <img
+        *ngIf="me.cardPlayed.trucValue !== 0"
+        src="assets/cards/{{ me.cardPlayed.numero }}{{
+          me.cardPlayed.palo
+        }}.svg"
+        alt="card_played_me"
+        class="card played"
+      />
+
+      <div class="player n4">
+        <span class="name">{{ right.player.user }}</span>
+        <img
+          *ngFor="let card of right.cards"
+          src="assets/cards/back_card.svg"
+          alt="back_card"
+          class="card"
+        />
+      </div>
+
+      <img
+        *ngIf="right.cardPlayed.trucValue !== 0"
+        src="assets/cards/{{ right.cardPlayed.numero }}{{
+          right.cardPlayed.palo
+        }}.svg"
+        alt="card_played_right"
+        class="card playedRight"
+      />
+      <div class="b-group">
+        <button
+          class="b"
+          mat-raised-button
+          color="primary"
+          (click)="trucar()"
+          [disabled]="gameState.trucDiabled ? 'disabled' : null"
+        >
+          {{ gameState.trucViewText }}
+        </button>
+        <button
+          class="b"
+          mat-raised-button
+          color="primary"
+          (click)="envidar()"
+          [attr.disabled]="gameState.trucDiabled ? 'disabled' : null"
+        >
+          {{ gameState.envitViewText }}
+        </button>
+      </div>
+      <div class="turnLabel">
+        <label>Turno de {{ gameState.nameTurn }}</label>
+      </div>
     </div>
-    <button class="card  playedRight {{ right.cardPlayed.palo }} ">
-      {{ right.cardPlayed.numero }}
-    </button>
-    <div class="b-group">
-      <button class="b" mat-raised-button color="primary" (click)="trucar()">
-        {{ trucViewText }}
-      </button>
-      <button class="b" mat-raised-button color="primary" (click)="envidar()">
-        {{ evitViewText }}
-      </button>
-    </div>
-    <div class="turnLabel">
-      <label>Turno de {{ nameTurn }}</label>
-    </div>
-  </div>
+  </ng-container>
+
+  <div *ngIf="gameState.end">El equipo {{ gameState.winner }} ha ganado</div>
 </div>
