@@ -61,6 +61,8 @@ export class GameComponent implements OnInit {
     for (let p of this.cardsGame) {
       if (p.player.playerNumber == 1) {
         this.gameState.playerStartHand = { ...p.player };
+        console.log(this.gameState.playerStartHand);
+
         break;
       }
     }
@@ -75,7 +77,7 @@ export class GameComponent implements OnInit {
       }
       this.gameState.cardsPlayedRound++;
       if (this.gameState.cardsPlayedRound == 4) {
-        this.gameState.envitDiabled = true;
+        this.gameState.envitDisabled = true;
         this.setWinner();
         this.gameState.round++;
         this.gameState.cardsPlayedRound = 0;
@@ -168,7 +170,7 @@ export class GameComponent implements OnInit {
             ...this.gameState,
             envitViewText: state,
             envitState: state,
-            envitDiabled: true,
+            envitDisabled: true,
           };
         } else if (data.status == 'current') {
           const { disabled, state, newValue } = data.payload;
@@ -177,7 +179,7 @@ export class GameComponent implements OnInit {
             envitValue: newValue,
             envitViewText: state,
             envitState: state,
-            envitDiabled: disabled,
+            envitDisabled: disabled,
           };
         } else {
           const { state, newValue, teamAction } = data.payload;
@@ -478,7 +480,9 @@ export class GameComponent implements OnInit {
       } else if (this.envitTeamWinner == 2) {
         this.gameState.team2Points += this.gameState.envitValue;
       }
-      let nextPlayer = ++this.gameState.playerStartHand.playerNumber;
+      console.log(this.gameState.playerStartHand);
+      const { playerNumber } = this.gameState.playerStartHand;
+      let nextPlayer = playerNumber + 1;
 
       if (nextPlayer > 4) nextPlayer = 1;
       for (let p of this.cardsGame) {
@@ -492,8 +496,14 @@ export class GameComponent implements OnInit {
       this.player.turn =
         this.gameState.playerStartHand.id == this.player.id ? true : false;
       this.resetGame();
-
-      if (this.player.turn == true) this.draw();
+      if (this.player.owner)
+        this.socketService.updateGame(
+          this.gameState.team1Points,
+          this.gameState.team2Points
+        );
+      if (this.player.turn == true) {
+        this.draw();
+      }
     }
   }
 
@@ -504,7 +514,9 @@ export class GameComponent implements OnInit {
     }
   }
   envidar() {
-    if (this.player.turn == true && !this.gameState.envitDiabled) {
+    console.log(this.player.turn, this.gameState.envitDisabled);
+
+    if (this.player.turn == true && !this.gameState.envitDisabled) {
       this.gameState.isEnvidar = true;
       this.gameService.envidar(
         this.gameState.envitState,
@@ -580,8 +592,14 @@ export class GameComponent implements OnInit {
     this.right.cardPlayed = defaultCard;
     this.gameService.trucResponsePlayers = { left: '', right: '' };
     this.gameService.envitResponsePlayers = { left: '', right: '' };
-    const { team1Points, team2Points, team } = this.gameState;
-    this.gameState = { ...defaultGameState, team1Points, team2Points, team };
+    const { team1Points, team2Points, team, playerStartHand } = this.gameState;
+    this.gameState = {
+      ...defaultGameState,
+      team1Points,
+      team2Points,
+      team,
+      playerStartHand,
+    };
     if (this.gameState.team1Points >= 30 || this.gameState.team2Points >= 30) {
       const winner =
         this.gameState.team1Points > this.gameState.team2Points

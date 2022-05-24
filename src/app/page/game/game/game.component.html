@@ -8,12 +8,14 @@
     <div class="box">
       <div class="player n1">
         <span class="name">{{ top.player.user }}</span>
-        <img
-          *ngFor="let card of top.cards"
-          src="assets/cards/back_card.svg"
-          alt="back_card"
-          class="card"
-        />
+        <div>
+          <img
+            *ngFor="let card of top.cards"
+            src="assets/cards/back_card.svg"
+            alt="back_card"
+            class="card"
+          />
+        </div>
       </div>
 
       <img
@@ -22,16 +24,20 @@
           top.cardPlayed.palo
         }}.svg"
         alt="card_played_top"
-        class="card playedTop"
+        class="playedTop"
+        class="card"
       />
       <div class="player n2">
         <span class="name">{{ left.player.user }}</span>
-        <img
-          *ngFor="let card of left.cards"
-          src="assets/cards/back_card.svg"
-          alt="back_card"
-          class="card"
-        />
+        <div>
+          <img
+            *ngFor="let card of left.cards"
+            src="assets/cards/back_card.svg"
+            alt="back_card"
+            ngClass.gt-xs="card"
+            ngClass.xs="xsCard"
+          />
+        </div>
       </div>
 
       <img
@@ -40,19 +46,23 @@
           left.cardPlayed.palo
         }}.svg"
         alt="card_played_left"
-        class="card playedLeft"
+        class="playedLeft"
+        ngClass.gt-xs="card"
+        ngClass.xs="xsCard"
       />
 
       <div class="player n3">
         <span class="name">{{ me.player.user }}</span>
-
-        <img
-          *ngFor="let card of me.cards"
-          (click)="playCard(card)"
-          src="assets/cards/{{ card.numero }}{{ card.palo }}.svg"
-          alt="back_card"
-          class="card"
-        />
+        <div>
+          <img
+            *ngFor="let card of me.cards"
+            (click)="playCard(card)"
+            src="assets/cards/{{ card.numero }}{{ card.palo }}.svg"
+            alt="back_card"
+            ngClass.gt-xs="card"
+            ngClass.xs="xsCard"
+          />
+        </div>
       </div>
 
       <img
@@ -61,17 +71,21 @@
           me.cardPlayed.palo
         }}.svg"
         alt="card_played_me"
-        class="card played"
+        class="played"
+        ngClass.gt-xs="card"
+        ngClass.xs="xsCard"
       />
 
       <div class="player n4">
         <span class="name">{{ right.player.user }}</span>
-        <img
-          *ngFor="let card of right.cards"
-          src="assets/cards/back_card.svg"
-          alt="back_card"
-          class="card"
-        />
+        <div>
+          <img
+            *ngFor="let card of right.cards"
+            src="assets/cards/back_card.svg"
+            alt="back_card"
+            class="card"
+          />
+        </div>
       </div>
 
       <img
@@ -80,7 +94,9 @@
           right.cardPlayed.palo
         }}.svg"
         alt="card_played_right"
-        class="card playedRight"
+        class="playedRight"
+        ngClass.gt-xs="card"
+        ngClass.xs="xsCard"
       />
       <div class="b-group">
         <button
@@ -97,7 +113,7 @@
           mat-raised-button
           color="primary"
           (click)="envidar()"
-          [attr.disabled]="gameState.trucDiabled ? 'disabled' : null"
+          [attr.disabled]="gameState.envitDisabled ? 'disabled' : null"
         >
           {{ gameState.envitViewText }}
         </button>

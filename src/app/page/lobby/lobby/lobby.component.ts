@@ -87,6 +87,9 @@ export class LobbyComponent implements OnInit {
     //this.socketService.leaveRoom(this.players);
   }
   startGame() {
-    if (this.players.length == 4) this.route.navigate(['/game']);
+    if (this.players.length == 4) {
+      this.socketService.postGame(this.players);
+      this.route.navigate(['/game']);
+    }
   }
 }

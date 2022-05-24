@@ -18,7 +18,7 @@ export interface gameState {
   round: number;
   team: number;
   trucDiabled: boolean;
-  envitDiabled: boolean;
+  envitDisabled: boolean;
   isEnvidar: boolean;
   end: boolean;
   winner: string;
@@ -52,7 +52,7 @@ export const defaultGameState: gameState = {
   round: 0,
   team: 0,
   trucDiabled: false,
-  envitDiabled: false,
+  envitDisabled: false,
   isEnvidar: false,
   end: false,
   winner: '',

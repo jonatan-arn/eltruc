@@ -1,5 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { Socket, io } from 'socket.io-client';
+import { environment } from 'src/environments/environment.prod';
 import { cardsPlayer } from '../interfaze/card';
 import { Player } from '../interfaze/player';
 @Injectable({
@@ -8,11 +10,13 @@ import { Player } from '../interfaze/player';
 export class SocketService {
   //Username of player who leave
   playerLeave: string = '';
+  private REST_API_SERVER = environment.REST_API_SERVER + 'api/';
 
   player!: Player;
   players: Player[] = [];
   socket!: Socket;
   owner: boolean = false;
+  gameID: number = 0;
 
   //On connected:room
   @Output() enterRoomEven: EventEmitter<Player> = new EventEmitter();
@@ -38,8 +42,8 @@ export class SocketService {
   //On start:game
   @Output() startGameEve: EventEmitter<cardsPlayer[]> = new EventEmitter();
 
-  constructor() {
-    this.socket = io('http://localhost:4000/', {
+  constructor(private http: HttpClient) {
+    this.socket = io(environment.REST_API_SERVER, {
       transports: ['websocket'],
     });
 
@@ -107,5 +111,18 @@ export class SocketService {
   //Emit a socket leave the room
   leaveRoom(players: Player[]) {
     this.socket.emit('leave:room', { players });
+  }
+  postGame(players: Player[]) {
+    // this.http
+    //   .post<any>(this.REST_API_SERVER, players)
+    //   .subscribe((res) => (this.gameID = res.id));
+  }
+  updateGame(team1Points: number, team2Points: number) {
+    // this.http
+    //   .put<any>(this.REST_API_SERVER + this.gameID, {
+    //     team1Points,
+    //     team2Points,
+    //   })
+    //   .subscribe();
   }
 }
