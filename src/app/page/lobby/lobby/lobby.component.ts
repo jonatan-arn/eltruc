@@ -14,7 +14,7 @@ export class LobbyComponent implements OnInit {
   players: Player[] = [];
   roomID: string = '';
   roomIDArray: string[] = [];
-
+  loading: boolean = true;
   isOwner: boolean = false;
   constructor(
     private socketService: SocketService,
@@ -34,7 +34,8 @@ export class LobbyComponent implements OnInit {
     for (var i = 0; i < this.roomID.length; i++) {
       this.roomIDArray.push(this.roomID.charAt(i));
     } //On  new:player:owner if current player is owner of room
-    if (this.socketService.player.owner)
+    if (this.socketService.player.owner) {
+      this.loading = false;
       this.socketService.newPlayerOwnerEven.subscribe((data) => {
         //Check what player number is not in use a give the first one to the new player
         let playerNumber = 0;
@@ -61,6 +62,7 @@ export class LobbyComponent implements OnInit {
         //Update all current players with the new one
         this.socketService.updatePlayers(this.players);
       });
+    }
 
     //On new:player
     this.socketService.newPlayerEvenGuest.subscribe((players) => {
@@ -69,6 +71,7 @@ export class LobbyComponent implements OnInit {
         if (p.id == this.socketService.player.id) this.socketService.player = p;
       this.socketService.players = players;
       this.players = players;
+      this.loading = false;
     });
     //On leave:player
     this.socketService.leaveRoomEve.subscribe((data) => {

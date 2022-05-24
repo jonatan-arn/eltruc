@@ -1,4 +1,4 @@
-<div class="lbox flex">
+<div class="lbox flex" *ngIf="!loading">
   <button
     class="btn"
     ngClass.gt-xs="btn-margins"
@@ -24,3 +24,4 @@
   </div>
   <app-players [players]="players" ngClass.gt-xs="players"></app-players>
 </div>
+<app-spinner class="lbox flex" *ngIf="loading"></app-spinner>

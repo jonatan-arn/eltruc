@@ -5,10 +5,18 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { HelpSnackbarComponent } from './components/help-snackbar/help-snackbar.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { SpinnerComponent } from './components/spinner/spinner.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
-  declarations: [HelpDialogComponent, HelpSnackbarComponent],
-  imports: [CommonModule, MatButtonModule, MatDialogModule, MatSnackBarModule],
-  exports: [HelpDialogComponent],
+  declarations: [HelpDialogComponent, HelpSnackbarComponent, SpinnerComponent],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+  ],
+  exports: [HelpDialogComponent, SpinnerComponent],
 })
 export class GlobalModule {}

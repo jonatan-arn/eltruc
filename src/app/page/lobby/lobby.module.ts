@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { GlobalModule } from 'src/app/global/global.module';
 
 @NgModule({
   declarations: [LobbyComponent, PlayersComponent],
@@ -15,6 +16,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
     MatDialogModule,
     FlexLayoutModule,
     ClipboardModule,
+    GlobalModule,
   ],
 })
 export class LobbyModule {}
