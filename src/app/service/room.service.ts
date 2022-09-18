@@ -18,6 +18,11 @@ export class SocketService {
   owner: boolean = false;
   gameID: number = 0;
 
+  //On disconnected
+  @Output() disconnectedEve: EventEmitter<boolean> = new EventEmitter();
+
+  //On connected
+  @Output() connectedEve: EventEmitter<boolean> = new EventEmitter();
   //On connected:room
   @Output() enterRoomEven: EventEmitter<Player> = new EventEmitter();
 
@@ -47,10 +52,17 @@ export class SocketService {
       transports: ['websocket'],
     });
 
+    this.socket.on('disconnect', () => {
+      console.log('des');
+      this.disconnectedEve.emit(false);
+    });
+    this.socket.on('connect', () => {
+      console.log('con');
+      this.connectedEve.emit(true);
+    });
     this.socket.on('connected:room', (data) => {
       this.enterRoomEven.emit(data);
     });
-
     this.socket.on('new:player:owner', (data) => {
       this.newPlayerOwnerEven.emit(data);
     });

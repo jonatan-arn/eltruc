@@ -19,21 +19,30 @@ export class HomeComponent implements OnInit {
   roomID: string = '';
   lobbyForm!: FormGroup;
   media: string = '';
+  connected: boolean = false;
   constructor(
     private socketService: SocketService,
     private route: Router,
-    private dialog: MatDialog,
+
     private mediaSizeService: MediaSizeService,
     private snackBar: MatSnackBar
   ) {}
   ngOnInit(): void {
-    //Emit socket connected
+    this.openSnackBar();
     this.mediaSizeService.getMedia().subscribe((res: any) => {
       this.media = res;
     });
 
-    this.socketService.connectSocket();
+    // this.socketService.connectSocket();
+    this.socketService.connectedEve.subscribe((data) => {
+      if (data) {
+        this.snackBar.dismiss();
+      }
+    });
 
+    this.socketService.disconnectedEve.subscribe((data) => {
+      this.openSnackBar();
+    });
     //Subscribe when connected to a room
     this.socketService.enterRoomEven.subscribe((data) => {
       //Add the new player to players array
@@ -59,5 +68,10 @@ export class HomeComponent implements OnInit {
     this.socketService.nameInRoom.subscribe(() =>
       this.snackBar.open('ese nombre ya existe en la sala')
     );
+  }
+  openSnackBar() {
+    this.snackBar.open('Intentando conectar con el servidor...', undefined, {
+      horizontalPosition: 'end',
+    });
   }
 }
