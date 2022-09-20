@@ -10,6 +10,21 @@ export interface cardsPlayer {
   player: Player;
   cardPlayed: card;
 }
+export interface cardsBoard {
+  card1_top: card;
+  card2_top: card;
+  card3_top: card;
+  card1_bottom: card;
+  card2_bottom: card;
+  card3_bottom: card;
+  card1_left: card;
+  card2_left: card;
+  card3_left: card;
+  card1_right: card;
+  card2_right: card;
+  card3_right: card;
+}
+
 export const cards: card[] = [
   { numero: '4', palo: 'o', trucValue: 9 },
   { numero: '5', palo: 'o', trucValue: 8 },
@@ -38,3 +53,18 @@ export const cards: card[] = [
   { numero: '1', palo: 'b', trucValue: 2 },
 ];
 export const defaultCard: card = { numero: '', palo: '', trucValue: 0 };
+
+export const defaultCardsBoard: cardsBoard = {
+  card1_top: defaultCard,
+  card2_top: defaultCard,
+  card3_top: defaultCard,
+  card1_bottom: defaultCard,
+  card2_bottom: defaultCard,
+  card3_bottom: defaultCard,
+  card1_left: defaultCard,
+  card2_left: defaultCard,
+  card3_left: defaultCard,
+  card1_right: defaultCard,
+  card2_right: defaultCard,
+  card3_right: defaultCard,
+};

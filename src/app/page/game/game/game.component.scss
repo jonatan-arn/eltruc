@@ -51,8 +51,7 @@
     }
 
     .player {
-      border: 1px solid black;
-      border-radius: 10px;
+      border: 0;
       margin: 1vw;
       padding: 2vh;
     }
@@ -75,33 +74,63 @@
   // justify-content: center;
   // align-items: center;
 }
+
 .xsCard {
   width: 15vw;
 }
-.playedTop {
+.played {
   position: absolute;
+  transition: 0.2s;
+}
+
+.played:focus-within ~ .played,
+.played:hover ~ .played {
+  transform: translateX(2vw);
+}
+
+.played:hover {
+  transform: translateY(-1rem);
+}
+
+.played:not(:first-child) {
+  margin-left: -2vw;
+}
+
+.playedTop {
   top: 32vh;
-  left: 47vw;
 }
 .playedLeft {
-  position: absolute;
-  top: 40vh;
-  left: 36vw;
+  left: 27vw;
   transform: rotate(90deg);
 }
 .playedRight {
-  position: absolute;
-  top: 40vh;
   left: 58vw;
   transform: rotate(-90deg);
 }
-.played {
-  position: absolute;
+.playedBottom {
   top: 53vh;
-  left: 47vw;
 }
 .turnLabel {
   position: absolute;
   bottom: 6vh;
   left: 13vw;
+}
+.playercard1 {
+  left: 40vw;
+}
+.playercard2 {
+  left: 43vw;
+}
+.playercard3 {
+  left: 46vw;
+}
+
+.playercardSide1 {
+  top: 37vh;
+}
+.playercardSide2 {
+  top: 40vh;
+}
+.playercardSide3 {
+  top: 43vh;
 }

@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Player } from 'src/app/interfaze/player';
-import { cardsPlayer, card, cards, defaultCard } from 'src/app/interfaze/card';
+import {
+  cardsPlayer,
+  card,
+  cards,
+  defaultCard,
+  defaultCardsBoard,
+  cardsBoard,
+} from 'src/app/interfaze/card';
 import { GameService } from 'src/app/service/game.service';
 import { SocketService } from 'src/app/service/room.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -27,15 +34,15 @@ export class GameComponent implements OnInit {
   cardsGameMap: Map<number, cardsPlayer> = new Map([]);
   currentIndexes: number[] = [];
   gameState: gameState = { ...defaultGameState };
-  trucStates = defautlTrucStates;
-  envitStates = defautlEnvitStates;
+  trucStates = { ...defautlTrucStates };
+  envitStates = { ...defautlEnvitStates };
   envitTeamWinner = 0;
   //View
   me!: cardsPlayer;
   top!: cardsPlayer;
   left!: cardsPlayer;
   right!: cardsPlayer;
-
+  cardsBoard: cardsBoard = { ...defaultCardsBoard };
   constructor(
     private socketService: SocketService,
     private gameService: GameService,
@@ -72,6 +79,9 @@ export class GameComponent implements OnInit {
       this.gameState.nameTurn = nextPlayer.user;
       this.cardsGame = cards;
       this.loadMap();
+      let pNumber =
+        nextPlayer.playerNumber - 1 != 0 ? nextPlayer.playerNumber - 1 : 4;
+      this.assingCardBoard(pNumber, card);
       if (nextPlayer.id == this.player.id) {
         this.player = nextPlayer;
       }
@@ -586,6 +596,7 @@ export class GameComponent implements OnInit {
     };
   }
   resetGame() {
+    this.cardsBoard = { ...defaultCardsBoard };
     this.me.cardPlayed = defaultCard;
     this.top.cardPlayed = defaultCard;
     this.left.cardPlayed = defaultCard;
@@ -606,6 +617,68 @@ export class GameComponent implements OnInit {
           ? 'Equipo 1'
           : 'Equipo 2 ';
       this.gameState = { ...defaultGameState, end: true, winner };
+    }
+  }
+  assingCardBoard(player: number, card: card) {
+    const myposition = this.player.playerNumber;
+    let left = myposition - 1;
+    if (left == 0) left = 4;
+    let right = myposition + 1;
+    if (right == 5) right = 1;
+    let top = myposition + 2;
+    if (top == 6) top = 2;
+    else if (top == 5) top = 1;
+    if (player == myposition) {
+      switch (this.gameState.round) {
+        case 1:
+          this.cardsBoard.card1_bottom = card;
+          break;
+        case 2:
+          this.cardsBoard.card2_bottom = card;
+          break;
+        case 3:
+          this.cardsBoard.card3_bottom = card;
+          break;
+      }
+    }
+    if (player == right) {
+      switch (this.gameState.round) {
+        case 1:
+          this.cardsBoard.card1_right = card;
+          break;
+        case 2:
+          this.cardsBoard.card2_right = card;
+          break;
+        case 3:
+          this.cardsBoard.card3_right = card;
+          break;
+      }
+    }
+    if (player == left) {
+      switch (this.gameState.round) {
+        case 1:
+          this.cardsBoard.card1_left = card;
+          break;
+        case 2:
+          this.cardsBoard.card2_left = card;
+          break;
+        case 3:
+          this.cardsBoard.card3_left = card;
+          break;
+      }
+    }
+    if (player == top) {
+      switch (this.gameState.round) {
+        case 1:
+          this.cardsBoard.card1_top = card;
+          break;
+        case 2:
+          this.cardsBoard.card2_top = card;
+          break;
+        case 3:
+          this.cardsBoard.card3_top = card;
+          break;
+      }
     }
   }
 }
