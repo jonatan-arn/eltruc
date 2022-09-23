@@ -68,11 +68,6 @@
 
 .card {
   width: 6vw;
-  // height: 12vh;
-  // text-align: center;
-  // display: flex;
-  // justify-content: center;
-  // align-items: center;
 }
 
 .xsCard {
@@ -90,10 +85,6 @@
 
 .played:hover {
   transform: translateY(-1rem);
-}
-
-.played:not(:first-child) {
-  margin-left: -2vw;
 }
 
 .playedTop {
