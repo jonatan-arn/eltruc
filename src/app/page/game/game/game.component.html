@@ -1,186 +1,189 @@
 <div class="main">
   <ng-container *ngIf="!gameState.end">
-    <div class="points">
-      <div class="point">Puntos equipo 1: {{ gameState.team1Points }}</div>
-
-      <div class="point">Puntos equipo 2: {{ gameState.team2Points }}</div>
-    </div>
     <div class="box">
-      <fieldset class="player n1">
-        <legend class="name">{{ top.player.user }}</legend>
-        <div>
-          <img
-            *ngFor="let card of top.cards"
-            src="assets/cards/back_card.svg"
-            alt="back_card"
-            class="card"
-          />
-        </div>
-      </fieldset>
       <div>
-        <img
-          *ngIf="cardsBoard.card1_top.trucValue !== 0"
-          src="assets/cards/{{ cardsBoard.card1_top.numero }}{{
-            cardsBoard.card1_top.palo
-          }}.svg"
-          alt="card_played_top"
-          class="played playedTop playercard1"
-          ngClass.gt-xs="card"
-          ngClass.xs="xsCard"
-        />
-        <img
-          *ngIf="cardsBoard.card2_top.trucValue !== 0"
-          src="assets/cards/{{ cardsBoard.card2_top.numero }}{{
-            cardsBoard.card2_top.palo
-          }}.svg"
-          alt="card_played_top"
-          class="played playedTop playercard2"
-          ngClass.gt-xs="card"
-          ngClass.xs="xsCard"
-        />
-        <img
-          *ngIf="cardsBoard.card3_top.trucValue !== 0"
-          src="assets/cards/{{ cardsBoard.card3_top.numero }}{{
-            cardsBoard.card3_top.palo
-          }}.svg"
-          alt="card_played_top"
-          class="played playedTop playercard3"
-          ngClass.gt-xs="card"
-          ngClass.xs="xsCard"
-        />
+        <fieldset>
+          <legend class="name">{{ top.player.user }}</legend>
+          <div class="card_player_container">
+            <img
+              *ngFor="let card of top.cards"
+              src="assets/cards/back_card.svg"
+              alt="back_card"
+              class="card"
+            />
+          </div>
+        </fieldset>
       </div>
-      <fieldset class="player n2">
-        <legend class="name">{{ left.player.user }}</legend>
-        <div>
-          <img
-            *ngFor="let card of left.cards"
-            src="assets/cards/back_card.svg"
-            alt="back_card"
-            class="card"
-          />
+      <div class="mid_row">
+        <fieldset>
+          <legend class="name">{{ left.player.user }}</legend>
+          <div class="card_player_container_col">
+            <img
+              *ngFor="let card of left.cards"
+              src="assets/cards/back_card.svg"
+              alt="back_card"
+              class="card_rotate card"
+            />
+          </div>
+        </fieldset>
+        <div class="cards_played">
+          <div class="cards_played_box">
+            <img
+              *ngIf="cardsBoard.card1_top.trucValue !== 0"
+              src="assets/cards/{{ cardsBoard.card1_top.numero }}{{
+                cardsBoard.card1_top.palo
+              }}.svg"
+              alt="card_played_top"
+              ngClass.gt-xs="card"
+              ngClass.xs="xsCard"
+            />
+            <img
+              *ngIf="cardsBoard.card2_top.trucValue !== 0"
+              src="assets/cards/{{ cardsBoard.card2_top.numero }}{{
+                cardsBoard.card2_top.palo
+              }}.svg"
+              alt="card_played_top"
+              ngClass.gt-xs="card"
+              ngClass.xs="xsCard"
+            />
+            <img
+              *ngIf="cardsBoard.card3_top.trucValue !== 0"
+              src="assets/cards/{{ cardsBoard.card3_top.numero }}{{
+                cardsBoard.card3_top.palo
+              }}.svg"
+              alt="card_played_top"
+              ngClass.gt-xs="card"
+              ngClass.xs="xsCard"
+            />
+          </div>
+
+          <div class="card_played_mid_row">
+            <div class="cards_played_box_col">
+              <img
+                *ngIf="cardsBoard.card1_left.trucValue !== 0"
+                src="assets/cards/{{ cardsBoard.card1_left.numero }}{{
+                  cardsBoard.card1_left.palo
+                }}.svg"
+                alt="card_played_left"
+                ngClass.gt-xs="card card_rotate"
+                ngClass.xs="xsCard card_rotate"
+              />
+              <img
+                *ngIf="cardsBoard.card2_left.trucValue !== 0"
+                src="assets/cards/{{ cardsBoard.card2_left.numero }}{{
+                  cardsBoard.card2_left.palo
+                }}.svg"
+                alt="card_played_left"
+                ngClass.gt-xs="card card_rotate"
+                ngClass.xs="xsCard card_rotate"
+              />
+              <img
+                *ngIf="cardsBoard.card3_left.trucValue !== 0"
+                src="assets/cards/{{ cardsBoard.card3_left.numero }}{{
+                  cardsBoard.card3_left.palo
+                }}.svg"
+                alt="card_played_left"
+                ngClass.gt-xs="card card_rotate"
+                ngClass.xs="xsCard card_rotate"
+              />
+            </div>
+            <div class="cards_played_box_col">
+              <img
+                *ngIf="cardsBoard.card1_right.trucValue !== 0"
+                src="assets/cards/{{ cardsBoard.card1_right.numero }}{{
+                  cardsBoard.card1_right.palo
+                }}.svg"
+                alt="card_played_right"
+                ngClass.gt-xs="card card_rotate"
+                ngClass.xs="xsCard card_rotate"
+              />
+              <img
+                *ngIf="cardsBoard.card2_right.trucValue !== 0"
+                src="assets/cards/{{ cardsBoard.card2_right.numero }}{{
+                  cardsBoard.card2_right.palo
+                }}.svg"
+                alt="card_played_right"
+                ngClass.gt-xs="card card_rotate"
+                ngClass.xs="xsCard card_rotate"
+              />
+              <img
+                *ngIf="cardsBoard.card3_right.trucValue !== 0"
+                src="assets/cards/{{ cardsBoard.card3_right.numero }}{{
+                  cardsBoard.card3_right.palo
+                }}.svg"
+                alt="card_played_right"
+                ngClass.gt-xs="card card_rotate"
+                ngClass.xs="xsCard card_rotate"
+              />
+            </div>
+          </div>
+          <div class="cards_played_box">
+            <img
+              *ngIf="cardsBoard.card1_bottom.trucValue !== 0"
+              src="assets/cards/{{ cardsBoard.card1_bottom.numero }}{{
+                cardsBoard.card1_bottom.palo
+              }}.svg"
+              alt="card_played_me"
+              ngClass.gt-xs="card"
+              ngClass.xs="xsCard"
+            />
+            <img
+              *ngIf="cardsBoard.card2_bottom.trucValue !== 0"
+              src="assets/cards/{{ cardsBoard.card2_bottom.numero }}{{
+                cardsBoard.card2_bottom.palo
+              }}.svg"
+              alt="card_played_me"
+              ngClass.gt-xs="card"
+              ngClass.xs="xsCard"
+            />
+            <img
+              *ngIf="cardsBoard.card3_bottom.trucValue !== 0"
+              src="assets/cards/{{ cardsBoard.card3_bottom.numero }}{{
+                cardsBoard.card3_bottom.palo
+              }}.svg"
+              alt="card_played_me"
+              ngClass.gt-xs="card"
+              ngClass.xs="xsCard"
+            />
+          </div>
         </div>
-      </fieldset>
-      <div>
-        <img
-          *ngIf="cardsBoard.card1_left.trucValue !== 0"
-          src="assets/cards/{{ cardsBoard.card1_left.numero }}{{
-            cardsBoard.card1_left.palo
-          }}.svg"
-          alt="card_played_left"
-          class="played playedLeft playercardSide1"
-          ngClass.gt-xs="card"
-          ngClass.xs="xsCard"
-        />
-        <img
-          *ngIf="cardsBoard.card2_left.trucValue !== 0"
-          src="assets/cards/{{ cardsBoard.card2_left.numero }}{{
-            cardsBoard.card2_left.palo
-          }}.svg"
-          alt="card_played_left"
-          class="played playedLeft playercardSide2"
-          ngClass.gt-xs="card"
-          ngClass.xs="xsCard"
-        />
-        <img
-          *ngIf="cardsBoard.card3_left.trucValue !== 0"
-          src="assets/cards/{{ cardsBoard.card3_left.numero }}{{
-            cardsBoard.card3_left.palo
-          }}.svg"
-          alt="card_played_left"
-          class="played playedLeft playercardSide3"
-          ngClass.gt-xs="card"
-          ngClass.xs="xsCard"
-        />
+        <fieldset>
+          <legend class="name">{{ right.player.user }}</legend>
+          <div class="card_player_container_col">
+            <img
+              *ngFor="let card of right.cards"
+              src="assets/cards/back_card.svg"
+              alt="back_card"
+              class="card_rotate card"
+            />
+          </div>
+        </fieldset>
       </div>
-      <fieldset class="player n3">
-        <legend class="name">{{ me.player.user }}</legend>
-        <div>
-          <img
-            *ngFor="let card of me.cards"
-            (click)="playCard(card)"
-            src="assets/cards/{{ card.numero }}{{ card.palo }}.svg"
-            alt="back_card"
-            ngClass.gt-xs="card"
-            ngClass.xs="xsCard"
-          />
-        </div>
-      </fieldset>
       <div>
-        <img
-          *ngIf="cardsBoard.card1_bottom.trucValue !== 0"
-          src="assets/cards/{{ cardsBoard.card1_bottom.numero }}{{
-            cardsBoard.card1_bottom.palo
-          }}.svg"
-          alt="card_played_me"
-          class="played playedBottom playercard1"
-          ngClass.gt-xs="card"
-          ngClass.xs="xsCard"
-        />
-        <img
-          *ngIf="cardsBoard.card2_bottom.trucValue !== 0"
-          src="assets/cards/{{ cardsBoard.card2_bottom.numero }}{{
-            cardsBoard.card2_bottom.palo
-          }}.svg"
-          alt="card_played_me"
-          class="played playedBottom playercard2"
-          ngClass.gt-xs="card"
-          ngClass.xs="xsCard"
-        />
-        <img
-          *ngIf="cardsBoard.card3_bottom.trucValue !== 0"
-          src="assets/cards/{{ cardsBoard.card3_bottom.numero }}{{
-            cardsBoard.card3_bottom.palo
-          }}.svg"
-          alt="card_played_me"
-          class="played playedBottom playercard3"
-          ngClass.gt-xs="card"
-          ngClass.xs="xsCard"
-        />
+        <fieldset>
+          <legend class="name">{{ me.player.user }}</legend>
+          <div class="card_player_container">
+            <img
+              *ngFor="let card of me.cards"
+              (click)="playCard(card)"
+              src="assets/cards/{{ card.numero }}{{ card.palo }}.svg"
+              alt="back_card"
+              ngClass.gt-xs="card"
+              ngClass.xs="xsCard"
+            />
+          </div>
+        </fieldset>
       </div>
-      <fieldset class="player n4">
-        <legend class="name">{{ right.player.user }}</legend>
-        <div>
-          <img
-            *ngFor="let card of right.cards"
-            src="assets/cards/back_card.svg"
-            alt="back_card"
-            class="card"
-          />
-        </div>
-      </fieldset>
+    </div>
+    <div class="col_box">
       <div>
-        <img
-          *ngIf="cardsBoard.card1_right.trucValue !== 0"
-          src="assets/cards/{{ cardsBoard.card1_right.numero }}{{
-            cardsBoard.card1_right.palo
-          }}.svg"
-          alt="card_played_right"
-          class="played playedRight playercardSide1"
-          ngClass.gt-xs="card"
-          ngClass.xs="xsCard"
-        />
-        <img
-          *ngIf="cardsBoard.card2_right.trucValue !== 0"
-          src="assets/cards/{{ cardsBoard.card2_right.numero }}{{
-            cardsBoard.card2_right.palo
-          }}.svg"
-          alt="card_played_right"
-          class="played playedRight playercardSide2"
-          ngClass.gt-xs="card"
-          ngClass.xs="xsCard"
-        />
-        <img
-          *ngIf="cardsBoard.card3_right.trucValue !== 0"
-          src="assets/cards/{{ cardsBoard.card3_right.numero }}{{
-            cardsBoard.card3_right.palo
-          }}.svg"
-          alt="card_played_right"
-          class="played playedRight playercardSide3"
-          ngClass.gt-xs="card"
-          ngClass.xs="xsCard"
-        />
+        <div>Puntos equipo 1: {{ gameState.team1Points }}</div>
+        <div>Puntos equipo 2: {{ gameState.team2Points }}</div>
       </div>
-      <div class="b-group">
+      <div>
+        <label>Turno de {{ gameState.nameTurn }}</label>
+      </div>
+      <div>
         <button
           class="b"
           mat-raised-button
@@ -199,9 +202,6 @@
         >
           {{ gameState.envitViewText }}
         </button>
-      </div>
-      <div class="turnLabel">
-        <label>Turno de {{ gameState.nameTurn }}</label>
       </div>
     </div>
   </ng-container>

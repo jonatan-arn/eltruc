@@ -1,60 +1,26 @@
 .main {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  font-size: 2vw;
-  flex-direction: column;
-  .points {
-    display: flex;
-    gap: 2em;
-  }
-  .points,
-  .point {
-    padding-bottom: 1rem;
-  }
-  .point {
-    font-size: 1rem;
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 2rem;
+  .col_box {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    grid-column-gap: 2rem;
+    background: #65a2d7;
+    border-radius: 0.5rem;
+    height: 90%;
+    align-self: center;
   }
   .box {
-    border-radius: 15px;
-
-    width: 90vw;
-    height: 90vh;
-
-    .players {
-      margin: 1vh;
-    }
-    .n1,
-    .n2,
-    .n3,
-    .n4 {
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-    }
-    .n1 {
-      left: 35vw;
-    }
-    .n2 {
-      top: 40vh;
-      transform: rotate(90deg);
-    }
-    .n3 {
-      top: 70vh;
-      left: 35vw;
-    }
-    .n4 {
-      top: 40vh;
-      left: 70vw;
-      transform: rotate(-90deg);
-    }
-
-    .player {
-      border: 0;
-      margin: 1vw;
-      padding: 2vh;
-    }
+    background: beige;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: stretch;
+    align-content: stretch;
     .b-group {
       position: absolute;
       bottom: 0;
@@ -67,7 +33,7 @@
 }
 
 .card {
-  width: 6vw;
+  width: 5vw;
 }
 
 .xsCard {
@@ -87,41 +53,59 @@
   transform: translateY(-1rem);
 }
 
-.playedTop {
-  top: 32vh;
+.mid_row {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 2rem;
 }
-.playedLeft {
-  left: 27vw;
-  transform: rotate(90deg);
-}
-.playedRight {
-  left: 58vw;
-  transform: rotate(-90deg);
-}
-.playedBottom {
-  top: 53vh;
-}
-.turnLabel {
-  position: absolute;
-  bottom: 6vh;
-  left: 13vw;
-}
-.playercard1 {
-  left: 40vw;
-}
-.playercard2 {
-  left: 43vw;
-}
-.playercard3 {
-  left: 46vw;
+.card_player_container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: stretch;
+  align-content: stretch;
 }
 
-.playercardSide1 {
-  top: 37vh;
+.card_player_container_col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
+  width: 100%;
+  height: 100%;
 }
-.playercardSide2 {
-  top: 40vh;
+.card_rotate {
+  transform: rotate(-90deg);
 }
-.playercardSide3 {
-  top: 43vh;
+.cards_played {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: stretch;
+  align-content: stretch;
+}
+.cards_played_box {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: stretch;
+  align-content: stretch;
+}
+.card_played_mid_row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 2rem;
+}
+.cards_played_box_col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
 }
