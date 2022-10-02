@@ -3,31 +3,37 @@
   grid-template-columns: 4fr 1fr;
   grid-template-rows: 1fr;
   grid-column-gap: 2rem;
-  .col_box {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(3, 1fr);
-    grid-column-gap: 2rem;
-    background: #65a2d7;
-    border-radius: 0.5rem;
-    height: 90%;
-    align-self: center;
-  }
-  .box {
-    background: beige;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: stretch;
-    align-content: stretch;
-    .b-group {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      .b {
-        margin: 1rem;
-      }
+}
+.xsMain {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 4fr 1fr;
+  grid-column-gap: 2rem;
+}
+.col_box {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(3, 1fr);
+  grid-column-gap: 2rem;
+  background: #65a2d7;
+  border-radius: 0.5rem;
+  height: 90%;
+  align-self: center;
+}
+.box {
+  background: beige;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: stretch;
+  align-content: stretch;
+  .b-group {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    .b {
+      margin: 1rem;
     }
   }
 }
