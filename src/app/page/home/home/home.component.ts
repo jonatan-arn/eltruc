@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { Observable, Subject } from 'rxjs';
 import { Socket, io } from 'socket.io-client';
 import { HelpDialogComponent } from 'src/app/global/components/help-dialog/help-dialog.component';
 import { MediaSizeService } from 'src/app/service/media-size.service';
@@ -18,20 +20,16 @@ export class HomeComponent implements OnInit {
   name: string = '';
   roomID: string = '';
   lobbyForm!: FormGroup;
-  media: string = '';
   connected: boolean = false;
+  mediaSub: Observable<MediaChange> = this.mediaObserver.media$;
   constructor(
     private socketService: SocketService,
     private route: Router,
-
-    private mediaSizeService: MediaSizeService,
+    private mediaObserver: MediaObserver,
     private snackBar: MatSnackBar
   ) {}
   ngOnInit(): void {
     this.openSnackBar();
-    this.mediaSizeService.getMedia().subscribe((res: any) => {
-      this.media = res;
-    });
 
     // this.socketService.connectSocket();
     this.socketService.connectedEve.subscribe((data) => {
