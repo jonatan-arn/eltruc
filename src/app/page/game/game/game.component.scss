@@ -1,7 +1,7 @@
 .main {
   display: grid;
-  grid-template-columns: 4fr 1fr;
-  grid-template-rows: 1fr;
+  grid-template-columns: 1fr;
+  grid-template-rows: 4fr 1fr;
   grid-column-gap: 2rem;
 }
 .xsMain {
@@ -15,13 +15,25 @@
   grid-template-columns: 1fr;
   grid-template-rows: repeat(3, 1fr);
   grid-column-gap: 2rem;
-  background: #65a2d7;
+  background: #fcfcfc;
   border-radius: 0.5rem;
   height: 90%;
   align-self: center;
+  border: 2px solid #aaaaaa;
+  border-radius: 0.5rem;
+  height: 100%;
+  margin-top: 1rem;
+  .row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .col {
+    flex-direction: column;
+  }
 }
 .box {
-  background: beige;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -72,6 +84,7 @@
   justify-content: center;
   align-items: stretch;
   align-content: stretch;
+  gap: 2rem;
 }
 
 .card_player_container_col {
@@ -93,6 +106,7 @@
   justify-content: space-between;
   align-items: stretch;
   align-content: stretch;
+  gap: 2rem;
 }
 .cards_played_box {
   display: flex;
@@ -114,4 +128,10 @@
   justify-content: center;
   align-items: center;
   align-content: stretch;
+}
+.no_border {
+  border: 0;
+}
+.width20 {
+  width: 20%;
 }

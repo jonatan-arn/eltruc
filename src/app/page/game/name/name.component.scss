@@ -1,0 +1,21 @@
+.name {
+  text-align: center;
+  width: 15rem;
+  background: white;
+  border-radius: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 0;
+  box-shadow: 5px 5px 5px -2px rgb(0 0 0 / 40%);
+}
+.name_box {
+  display: flex;
+  justify-content: center;
+}
+.margin_bottom {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+.margin_side {
+  margin: 0;
+  width: 100%;
+}

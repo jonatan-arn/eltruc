@@ -2,8 +2,7 @@
   <ng-container *ngIf="!gameState.end">
     <div class="box">
       <div>
-        <fieldset>
-          <legend class="name">{{ top.player.user }}</legend>
+        <div>
           <div class="card_player_container">
             <img
               *ngFor="let card of top.cards"
@@ -12,11 +11,11 @@
               class="card"
             />
           </div>
-        </fieldset>
+          <app-name [name]="top.player.user"></app-name>
+        </div>
       </div>
       <div class="mid_row">
-        <fieldset>
-          <legend class="name">{{ left.player.user }}</legend>
+        <div>
           <div class="card_player_container_col">
             <img
               *ngFor="let card of left.cards"
@@ -25,7 +24,8 @@
               class="card_rotate card"
             />
           </div>
-        </fieldset>
+          <app-name [name]="left.player.user" [side]="true"></app-name>
+        </div>
         <div class="cards_played">
           <div class="cards_played_box">
             <img
@@ -147,8 +147,7 @@
             />
           </div>
         </div>
-        <fieldset>
-          <legend class="name">{{ right.player.user }}</legend>
+        <div>
           <div class="card_player_container_col">
             <img
               *ngFor="let card of right.cards"
@@ -157,11 +156,12 @@
               class="card_rotate card"
             />
           </div>
-        </fieldset>
+          <app-name [name]="right.player.user" [side]="true"></app-name>
+        </div>
       </div>
       <div>
-        <fieldset>
-          <legend class="name">{{ me.player.user }}</legend>
+        <div>
+          <app-name [name]="me.player.user" [margin_bottom]="true"></app-name>
           <div class="card_player_container">
             <img
               *ngFor="let card of me.cards"
@@ -172,18 +172,18 @@
               ngClass.xs="xsCard"
             />
           </div>
-        </fieldset>
+        </div>
       </div>
     </div>
-    <div class="col_box">
-      <div>
+    <div class="col_box" ngClass.gt-xs="width20">
+      <div class="row col">
         <div>Puntos equipo 1: {{ gameState.team1Points }}</div>
         <div>Puntos equipo 2: {{ gameState.team2Points }}</div>
       </div>
-      <div>
+      <div class="row">
         <label>Turno de {{ gameState.nameTurn }}</label>
       </div>
-      <div>
+      <div class="row">
         <button
           class="b"
           mat-raised-button
